@@ -56,9 +56,10 @@ endfunction
 
 
 "=====[ CONSTANTS ]==========================================================
+let g:Vimpoint_sections = []
 
 let g:Vimpoint_DEFAULT_ROWS = 24
-let g:Vimpoint_DEFAULT_COLS = 76
+let g:Vimpoint_DEFAULT_COLS = 99
 let g:Vimpoint_LEFT_MARGIN  = 3
 
 let g:Vimpoint_UNDERLINE_DELIM = 'º'
@@ -270,6 +271,7 @@ function! VimpointGetFoldLevel(lineno)
 
     " Section headers are folded to the first level...
     elseif line =~ s:SECTION_PAT
+        call add(g:Vimpoint_sections, line)
         return 1
 
     " Before a header, empty lines are folded one level less...
@@ -1787,6 +1789,7 @@ function! s:build_docmodel (...)
                 let section_count += 1
             endif
             let line = substitute(line, '\\', '', 'g')
+            call add(g:Vimpoint_sections, line)
 
             let docmodel += [{
             \    'type':    'vps',
@@ -2395,6 +2398,17 @@ function! VimpointIntermissionTimer (duration)
 endfunction
 
 "============================================================================
+
+" Tagbar-esque sidebar
+function! VimpointGenerateSideBar() abort
+    vnew
+    vertical resize 40
+
+    for sec in reverse(g:Vimpoint_sections)
+        echo sec
+        call execute('normal o' . sec)
+    endfor
+endfunction
 
 " Restore previous external compatibility options
 let &cpo = s:save_cpo
