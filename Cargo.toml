@@ -1,0 +1,7 @@
+[package]
+name = "vimpoint"
+version = "0.1.0"
+authors = ["TJ DeVries <devries.timothyj@gmail.com>"]
+
+[dependencies]
+neovim-lib = "0.4.2"
